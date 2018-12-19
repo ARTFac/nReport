@@ -1,0 +1,19 @@
+name: nReport
+version: 1.0
+main: me.NickUltracraft.Report.Main
+description: Plugin de report básico em GUI.
+website: youtube.com/c/nickultracraft
+author: NickUltracraft
+commands:
+    report:
+        description: Comando para reportar jogadores.
+    reportar:
+        description: Comando para reportar jogadores.
+    reports:
+        description: Comando para listar reports de jogadores online.
+    reportes:
+        description: Comando para listar reports de jogadores online.
+permissions:
+    nreport.report:
+        description: Da acesso para o comando /reports
+        default: op
