@@ -24,7 +24,7 @@ public class Report implements CommandExecutor, Listener {
 	private String getHackName(String hack) {
 		if(!hack.equalsIgnoreCase("Anti-Knockback") && (!hack.equalsIgnoreCase("X-Ray") && (!hack.equalsIgnoreCase("No-Fall")))) {
 			if(hack.equalsIgnoreCase("Alianca")) {
-				return "Aliança";
+				return "AlianÃ§a";
 			} else {
 				return hack.replace("-", " ");
 			}
@@ -37,6 +37,7 @@ public class Report implements CommandExecutor, Listener {
 			File file = new File(Main.m.getDataFolder() + "/userdata", target.toLowerCase() + ".yml");
 			FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 			config.set("Reports." + target + ".Aimbot", 0);
+			config.set("Reports." + target + ".Kill-Aura", 0);
 			config.set("Reports." + target + ".ForceField", 0);
 			config.set("Reports." + target + ".AutoSoup", 0);
 			config.set("Reports." + target + ".Fly", 0);
@@ -47,7 +48,9 @@ public class Report implements CommandExecutor, Listener {
 			config.set("Reports." + target + ".Critical", 0);
 			config.set("Reports." + target + ".No-Fall", 0);
 			config.set("Reports." + target + ".Speed", 0);
+			config.set("Reports." + target + ".WallHack", 0);
 			config.set("Reports." + target + ".Alianca", 0);
+			config.set("Reports." + target + ".ofenÃ§a", 0);
 			config.set("Reports." + target + ".Total", 0);
 			config.set("Reports." + target + ".UltimaRazao", "");
 			config.set("Reports." + target + ".Reportado", false);
@@ -58,9 +61,9 @@ public class Report implements CommandExecutor, Listener {
 	}
 	private void mandar(Player player, String target, String hack, String hack2, boolean cor) {
 		if(cor) {
-			ChatManager.getInstance(player).executarComando("  §7" + hack, "§7Clique para reportar este jogador por " + hack + ".", "reportar " + target + " " + hack2);
+			ChatManager.getInstance(player).executarComando("  Â§7" + hack, "Â§7Clique para reportar este jogador por " + hack + ".", "reportar " + target + " " + hack2);
 		} else {
-			ChatManager.getInstance(player).executarComando("  §f" + hack, "§7Clique para reportar este jogador por " + hack + ".", "reportar " + target + " " + hack2);
+			ChatManager.getInstance(player).executarComando("  Â§f" + hack, "Â§7Clique para reportar este jogador por " + hack + ".", "reportar " + target + " " + hack2);
 		}
 	}
 	private void salvarReport(String target, String hack) {
@@ -88,10 +91,10 @@ public class Report implements CommandExecutor, Listener {
 	@SuppressWarnings("deprecation")
 	private void reportar(Player player, String target, String hack) {
 		salvarReport(target, hack);
-		player.sendMessage("§7Você reportou o jogador §f" + target + " §7por §f" + getHackName(hack));
+		player.sendMessage("Â§7VocÃª reportou o jogador Â§f" + target + " Â§7por Â§f" + getHackName(hack));
 		for(Player on : Bukkit.getOnlinePlayers()) {
 			if(on.hasPermission("nreport.report")) {
-				on.sendTitle("§c§lReport", "§7Uma nova denúncia foi recebida");
+				on.sendTitle("Â§cÂ§lReport", "Â§7Uma nova denÃºncia foi recebida");
 				on.playSound(on.getLocation(), Sound.ENDERDRAGON_GROWL, 15, 1);
 			}
 		}
@@ -102,20 +105,20 @@ public class Report implements CommandExecutor, Listener {
 			Player p = (Player)sender;
 			if(lb.equalsIgnoreCase("reports") || (lb.equalsIgnoreCase("reportes"))) {
 				if(!p.hasPermission("nreport.report")) {
-					p.sendMessage("§cVocê não tem permissão para executar este comando.");
+					p.sendMessage("Â§cVocÃª nÃ£o tem permissÃ£o para executar este comando.");
 					return true;
 				}
-				Inventory inv = Bukkit.createInventory(null, 54, "§8Todos os Reports");
+				Inventory inv = Bukkit.createInventory(null, 54, "Â§8Todos os Reports");
 				
 				for(Player on : Bukkit.getOnlinePlayers()) {
 					File file = new File(Main.m.getDataFolder() + "/userdata", on.getName().toLowerCase() + ".yml");
 					FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 					int inicio = 10;
 					if(config.getBoolean("Reports." + on.getName() + ".Reportado")) {
-						inv.setItem(inicio, Criar.getInstance().add("§7" + on.getName(), on.getName(), new String[] {"§7Total de denúncias: §f" + config.getInt("Reports." + on.getName() + ".Total")}));
+						inv.setItem(inicio, Criar.getInstance().add("Â§7" + on.getName(), on.getName(), new String[] {"Â§7Total de denÃºncias: Â§f" + config.getInt("Reports." + on.getName() + ".Total")}));
 						inicio++;
 						if(inicio == 44) {
-							p.sendMessage("§cExistem mais denúncias, mas nem todas puderam ser carregadas.");
+							p.sendMessage("Â§cExistem mais denÃºncias, mas nem todas puderam ser carregadas.");
 						}
 					}
 				}
@@ -125,7 +128,7 @@ public class Report implements CommandExecutor, Listener {
 			}
 			if(lb.equalsIgnoreCase("report") || (lb.equalsIgnoreCase("reportar"))) {
 				if(args.length == 0) {
-					p.sendMessage("§cVocê deve usar: /" + lb.toLowerCase() + " <jogador>");
+					p.sendMessage("Â§cVocÃª deve usar: /" + lb.toLowerCase() + " <jogador>");
 					return true;
 				}
 				if(args.length == 1) {
@@ -134,22 +137,26 @@ public class Report implements CommandExecutor, Listener {
 						t = Bukkit.getPlayer(t).getName();
 					}
 					if(t.equalsIgnoreCase(p.getName())) {
-						p.sendMessage("§cVocê não pode reportar a si mesmo.");
+						p.sendMessage("Â§cVocÃª nÃ£o pode reportar a si mesmo.");
 						return true;
 					}
-					p.sendMessage("§ePara concluir sua denúncia, escolha um dos motivos:");
+					p.sendMessage("Â§ePara concluir sua denÃºncia, escolha um dos motivos:");
+					p.sendMessage("");
 					mandar(p, t, "Aimbot", "Aimbot", true);
-					mandar(p, t, "Force Field", "Force-Field", false);
-					mandar(p, t, "Auto Soup", "Auto-Soup", true);
-					mandar(p, t, "Fly", "Fly", false);
-					mandar(p, t, "Auto Armor", "Auto-Armor", true);
-					mandar(p, t, "Auto Clicker", "Auto-Clicker", false);
-					mandar(p, t, "Anti-Knockback", "Anti-Knockback", true);
-					mandar(p, t, "X-Ray", "X-Ray", false);
-					mandar(p, t, "Critical", "Critical", true);
-					mandar(p, t, "No-Fall", "No-Fall", false);
-					mandar(p, t, "Speed", "Speed", true);
-					mandar(p, t, "Aliança", "Alianca", false);
+					mandar(p, t, "Kill-Aura", "Kill-Aura", false);
+					mandar(p, t, "Force Field", "Force-Field", true);
+					mandar(p, t, "Auto Soup", "Auto-Soup", false);
+					mandar(p, t, "Fly", "Fly", true);
+					mandar(p, t, "Auto Armor", "Auto-Armor", false);
+					mandar(p, t, "Auto Clicker", "Auto-Clicker", true);
+					mandar(p, t, "Anti-Knockback", "Anti-Knockback", false);
+					mandar(p, t, "X-Ray", "X-Ray", true);
+					mandar(p, t, "Critical", "Critical", false);
+					mandar(p, t, "No-Fall", "No-Fall", true);
+					mandar(p, t, "Speed", "Speed", false);
+					mandar(p, t, "WallHack", "WallHack", true);
+					mandar(p, t, "AlianÃ§a", "Alianca", false);
+					mandar(p, t, "OfenÃ§a", "OfenÃ§a", true);
 					p.sendMessage("");
 					return true;
 				}
@@ -159,7 +166,7 @@ public class Report implements CommandExecutor, Listener {
 						t = Bukkit.getPlayer(t).getName();
 					}
 					if(t.equalsIgnoreCase(p.getName())) {
-						p.sendMessage("§cVocê não pode reportar a si mesmo.");
+						p.sendMessage("Â§cVocÃª nÃ£o pode reportar a si mesmo.");
 						return true;
 					}
 					String hack = args[1];
@@ -172,43 +179,43 @@ public class Report implements CommandExecutor, Listener {
 	}
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
-		if(e.getInventory().getName().equalsIgnoreCase("§8Todos os Reports")) {
+		if(e.getInventory().getName().equalsIgnoreCase("Â§8Todos os Reports")) {
 			if(e.getCurrentItem() != null && (e.getCurrentItem().hasItemMeta() && (e.getCurrentItem().getItemMeta().hasDisplayName()))) {
 				e.setCancelled(true);
 				Player p = (Player) e.getWhoClicked();
 				p.closeInventory();
-				String display = e.getCurrentItem().getItemMeta().getDisplayName().replace("§7", "");
+				String display = e.getCurrentItem().getItemMeta().getDisplayName().replace("Â§7", "");
 				
 				File file = new File(Main.m.getDataFolder() + "/userdata", display.toLowerCase() + ".yml");
 				FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 				
-				Inventory inv = Bukkit.createInventory(null, 27, "§8Reports >> " + display);
+				Inventory inv = Bukkit.createInventory(null, 27, "Â§8Reports >> " + display);
 				
-				inv.setItem(11, Criar.getInstance().add(Material.STAINED_GLASS_PANE, "§cRecusar denúncia(s)", new String[] {"§7Clique aqui para recusar as denúncias."}, 14));
-				inv.setItem(13, Criar.getInstance().add(Material.ENCHANTED_BOOK, "§aInformações das denúncias", new String[] {"§7Total de denúncias: " + config.getInt("Reports." + display + ".Total"), "", "§7Denúncias:", " §7" + getHackName(config.getString("Reports." + display + ".UltimaRazao")) + ": " + config.getInt("Reports." + display + "." + config.getString("Reports." + display + ".UltimaRazao"))}, 5));
-				inv.setItem(15, Criar.getInstance().add(Material.STAINED_GLASS_PANE, "§aAceitar denúncia(s)", new String[] {"§7Clique aqui para aceitar as denúncias."}, 5));
+				inv.setItem(11, Criar.getInstance().add(Material.STAINED_GLASS_PANE, "Â§cRecusar denÃºncia(s)", new String[] {"Â§7Clique aqui para recusar as denÃºncias."}, 14));
+				inv.setItem(13, Criar.getInstance().add(Material.ENCHANTED_BOOK, "Â§aInformaÃ§Ãµes das denÃºncias", new String[] {"Â§7Total de denÃºncias: " + config.getInt("Reports." + display + ".Total"), "", "Â§7DenÃºncias:", " Â§7" + getHackName(config.getString("Reports." + display + ".UltimaRazao")) + ": " + config.getInt("Reports." + display + "." + config.getString("Reports." + display + ".UltimaRazao"))}, 5));
+				inv.setItem(15, Criar.getInstance().add(Material.STAINED_GLASS_PANE, "Â§aAceitar denÃºncia(s)", new String[] {"Â§7Clique aqui para aceitar as denÃºncias."}, 5));
 				
 				p.openInventory(inv);
 				
 			}
 		}
-		if(e.getInventory().getName().startsWith("§8Reports >> ")) {
+		if(e.getInventory().getName().startsWith("Â§8Reports >> ")) {
 			if(e.getCurrentItem() != null && (e.getCurrentItem().hasItemMeta() && (e.getCurrentItem().getItemMeta().hasDisplayName()))) {
 				e.setCancelled(true);
 				Player p = (Player) e.getWhoClicked();
 				String display = e.getCurrentItem().getItemMeta().getDisplayName();
-				String player = e.getInventory().getName().replace("§8Reports >> ", "");
+				String player = e.getInventory().getName().replace("Â§8Reports >> ", "");
 				
 				File file = new File(Main.m.getDataFolder() + "/userdata", player.toLowerCase() + ".yml");
 				FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 				
-				if(display.equalsIgnoreCase("§cRecusar denúncia(s)")) {
-					p.sendMessage("§cVocê recusou as denúncias e todos os reports deste jogador foram removidos.");
+				if(display.equalsIgnoreCase("Â§cRecusar denÃºncia(s)")) {
+					p.sendMessage("Â§cVocÃª recusou as denÃºncias e todos os reports deste jogador foram removidos.");
 					remover(player);
 					p.closeInventory();
 				}
-				if(display.equalsIgnoreCase("§aAceitar denúncia(s)")) {
-					p.sendMessage("§aVocê aceitou esta denuncia e o jogador foi automaticamente banido.");
+				if(display.equalsIgnoreCase("Â§aAceitar denÃºncia(s)")) {
+					p.sendMessage("Â§aVocÃª aceitou esta denuncia e o jogador foi automaticamente banido.");
 					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + player + " " + config.getString("Reports." + player + ".UltimaRazao"));
 					remover(player);
 					p.closeInventory();
