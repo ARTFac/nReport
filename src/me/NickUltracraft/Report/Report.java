@@ -22,7 +22,7 @@ import me.NickUltracraft.Report.API.Criar;
 public class Report implements CommandExecutor, Listener {
 
 	private String getHackName(String hack) {
-		if(!hack.equalsIgnoreCase("Anti-Knockback") && (!hack.equalsIgnoreCase("X-Ray") && (!hack.equalsIgnoreCase("No-Fall")))) {
+		if(!hack.equalsIgnoreCase("Anti-Knockback") && (!hack.equalsIgnoreCase("Kill-Aura") && (!hack.equalsIgnoreCase("X-Ray") && (!hack.equalsIgnoreCase("No-Fall"))))) {
 			if(hack.equalsIgnoreCase("Alianca")) {
 				return "Aliança";
 			} else {
@@ -95,7 +95,7 @@ public class Report implements CommandExecutor, Listener {
 		for(Player on : Bukkit.getOnlinePlayers()) {
 			if(on.hasPermission("nreport.report")) {
 				on.sendTitle("§c§lReport", "§7Uma nova denúncia foi recebida");
-				on.playSound(on.getLocation(), Sound.ENDERDRAGON_GROWL, 15, 1);
+				on.playSound(on.getLocation(), Sound.ORB_PICKUP, 15, 1);
 			}
 		}
 	}
